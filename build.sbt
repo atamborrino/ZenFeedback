@@ -1,4 +1,4 @@
-name := "zen-conf"
+name := "ZenFeedback"
 
 version := "1.0-SNAPSHOT"
 
