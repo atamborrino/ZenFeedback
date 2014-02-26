@@ -37,47 +37,53 @@ class AttendantSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload]
   def customReceive: Receive = {
     case Connected(id) =>
       context.parent ! AttendantConnect(id)
+      
+    case Disconnected(id) =>
+      context.parent ! Broadcast(id, msgFormatter.disconnected(id))
+      play.Logger.info(s"Disconnected ID:$id")
   }
   
   override def receive = customReceive orElse super.receive 
 }
 
+case class Connected(id: String)
+
 class CustomSupervisor extends Supervisor {
   var organisers = Map.empty[String, Member]
+  var attendants = Map.empty[String, Member]
+  var resultPages = Map.empty[String, Member]
   
   def customReceive: Receive = {
     case ResultPageConnected(id) =>
-      organisers.get(id) foreach (member => organisers += (id -> member))
-      
+      members.get(id) foreach { member => 
+        resultPages += (id -> member)
+        member.receiver ! Connected(id)
+      }
+    
+    case AttendantConnect(id) =>
+      members.get(id) foreach { member =>
+        attendants += (id -> member)
+        member.receiver ! Connected(id)
+      }
+    
+    case OrganiserConnected(id) =>
+      members.get(id) foreach { member =>
+        resultPages += (id -> member)
+        member.receiver ! Connected(id)
+      }
+
+    case Disconnected(id) =>
+      members.get(id).foreach { m =>
+        members -= id
+        m.sender ! Disconnected(id)
+        m.receiver ! PoisonPill
+        m.sender ! PoisonPill
+      }
+      organisers -= id
+      attendants -= id
+      resultPages -= id
       
   }
 
   override def receive = customReceive orElse super.receive
-}
-
-
-
-case class SendToOrganisers[A](payload: A)
-case class SendToResultPages[A](payload: A)
-case class BroadcastToAttendants[A](payload: A)
-
-class Organiser extends Actor {
-  def receive = {
-    case Received(from, js: JsValue) =>
-      // ...
-  }
-}
-
-class ResultPage extends Actor {
-  def receive = {
-    case Received(from, js: JsValue) =>
-      // ...
-  }
-}
-
-class Attendant extends Actor {
-  def receive = {
-    case Received(from, js: JsValue) =>
-      // ...
-  }
 }
