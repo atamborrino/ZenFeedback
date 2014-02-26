@@ -11,9 +11,9 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 import org.mandubian.actorroom._
 
-case class SendToOrganisers[A](payload: A)
-case class SendToResultPages[A](payload: A)
-case class BroadcastToAttendants[A](payload: A)
+case class SendToOrganisers[A](from: String, payload: A)
+case class SendToResultPages[A](from: String, payload: A)
+case class SendToAttendants[A](from: String, payload: A)
 
 class Organiser extends Actor {
   def receive = {

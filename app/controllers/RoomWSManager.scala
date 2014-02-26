@@ -71,6 +71,21 @@ class CustomSupervisor extends Supervisor {
         resultPages += (id -> member)
         member.receiver ! Connected(id)
       }
+      
+    case SendToOrganisers(from, data) =>
+      organisers foreach {
+        case (_, member) => member.sender ! Broadcast(from, data)
+      }
+
+    case SendToResultPages(from, data) =>
+      resultPages foreach {
+        case (_, member) => member.sender ! Broadcast(from, data)
+      }
+
+    case SendToAttendants(from, data) =>
+      attendants foreach {
+        case (_, member) => member.sender ! Broadcast(from, data)
+      } 
 
     case Disconnected(id) =>
       members.get(id).foreach { m =>
