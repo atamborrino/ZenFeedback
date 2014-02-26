@@ -15,7 +15,7 @@ case class OrganiserConnected(id: String)
 case class ResultPageConnected(id: String)
 case class AttendantConnect(id: String)
 
-class OrganiserSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload]) extends WebSocketSender[Payload] {
+class OrganiserSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
     case Connected(id) =>
       context.parent ! OrganiserConnected(id)
@@ -24,7 +24,7 @@ class OrganiserSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload]
   override def receive = customReceive orElse super.receive 
 }
 
-class ResultPageSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload]) extends WebSocketSender[Payload] {
+class ResultPageSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
     case Connected(id) =>
       context.parent ! ResultPageConnected(id)
@@ -33,14 +33,10 @@ class ResultPageSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload
   override def receive = customReceive orElse super.receive 
 }
 
-class AttendantSender[Payload](implicit msgFormatter: AdminMsgFormatter[Payload]) extends WebSocketSender[Payload] {
+class AttendantSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
     case Connected(id) =>
       context.parent ! AttendantConnect(id)
-      
-    case Disconnected(id) =>
-      context.parent ! Broadcast(id, msgFormatter.disconnected(id))
-      play.Logger.info(s"Disconnected ID:$id")
   }
   
   override def receive = customReceive orElse super.receive 

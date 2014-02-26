@@ -50,5 +50,11 @@ object Application extends Controller {
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
+  
+  val room = Room(Props[CustomSupervisor])
+
+  def connect(id: String) = {
+    //room.websocket[JsValue](id, Props[Organiser], Props[OrganiserSender])
+  }
 
 }
