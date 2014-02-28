@@ -118,8 +118,9 @@ object Application extends Controller {
     Ok(views.html.index())
   }
 
-  def results(name: String) = Action {
-    Ok(views.html.results(name))
+  def results(name: String) = Action { req =>
+    val host = req.host.split(":80").headOption getOrElse req.host
+    Ok(views.html.results(name, host))
   }
 
   def resultsJs(name: String) = Action { implicit request =>
@@ -147,8 +148,9 @@ object Application extends Controller {
 
   }
 
-  def getRoomOrga(name: String) = Action {
-    Ok(views.html.orga(name))
+  def getRoomOrga(name: String) = Action { req =>
+    val host = req.host.split(":80").headOption getOrElse req.host
+    Ok(views.html.orga(name, host))
   }
 
   def connectOrgaWs(name: String) = Room.async {

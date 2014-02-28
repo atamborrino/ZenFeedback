@@ -1,4 +1,4 @@
-@(name: String)
+@(name: String, host: String)
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +19,8 @@
 
     <div class="wrap">
       <div class="newquestion">
+        <p>Attendants page: @host/rooms/@name</p>
+        <p>Results page: @host/rooms/@name/results</p>
         <form name="new-question">
           <textarea class="question" name="question" placeholder="Your question here !"></textarea>
           <ol id="answers">
