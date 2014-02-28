@@ -81,14 +81,12 @@
 
   var receiveEvent = function(event) {
     var data = JSON.parse(event.data);
-    console.log("DATA : ", data);
     if(data.error) {
       socket.close();
     } else {
       update(data);
     }
   };
-
 
   init();
 
