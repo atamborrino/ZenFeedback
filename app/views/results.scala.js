@@ -2,7 +2,7 @@
 
 (function() {
   var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-  var socket = new WS("@routes.Application.resultsWS(roomName).webSocketURL()");
+  var socket = new WS("@routes.Application.connectResultsWS(roomName).webSocketURL()");
 
   var nbTotalVotes = 0;
   var answers = {};
@@ -36,7 +36,7 @@
     if(data.error) {
       socket.close();
     } else {
-      update(data);
+      //update(data);
     }
   };
 

@@ -39,18 +39,16 @@ class Organiser extends Actor {
     case Connected(id) =>
 
     case Received(id, js: JsValue) =>
-      println(js)
-      
       val question = Question((js \ "question" \ "name").as[String])
-      
+
       val answers = (js \ "answers").as(
         Reads.seq(
             (__ \ "name").read[String]
         )
       ) map { str => Answer(str) }
-      
+
       context.parent ! SendNewQuestion(question, answers)
-      
+
   }
 }
 
@@ -81,7 +79,7 @@ case class GetRoom(name: String)
 
 class Rooms extends Actor {
   var rooms = Map("test" -> Room(Props[CustomSupervisor]))
-  
+
   def receive = {
     case CreateRoom(name) =>
       val maybeRoom = rooms.get(name)
@@ -97,10 +95,10 @@ class Rooms extends Actor {
 
     case GetRoom(name: String) =>
       rooms.get(name) match {
-        case Some(room) => 
+        case Some(room) =>
           sender ! Option(room)
           println("sending room")
-        case None => 
+        case None =>
           sender ! Option.empty[Room]
           println("no room")
       }
@@ -122,10 +120,6 @@ object Application extends Controller {
 
   def results(name: String) = Action {
     Ok(views.html.results(name, question, answers))
-  }
-
-  def resultsWS(name: String) = WebSocket.async[JsValue] { request =>
-    Future(TmpWsForTest.ws(answers))
   }
 
   def resultsJs(name: String) = Action { implicit request =>
@@ -160,7 +154,7 @@ object Application extends Controller {
   def connectOrgaWs(name: String) = Room.async {
     val orgaid = UUID.randomUUID().toString
     println("connection...")
-    
+
     val futureRoom = (rooms ? GetRoom(name)).mapTo[Option[Room]] map (maybeRoom => maybeRoom.get)
 
     futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => orgaid, Props[Organiser], Props[OrganiserSender]))
@@ -180,35 +174,5 @@ object Application extends Controller {
     val futureRoom = (rooms ? GetRoom(name)).mapTo[Option[Room]] map (maybeRoom => maybeRoom.get)
 
     futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => id, Props[ResultPage], Props[ResultPageSender]))
-  }
-
-
-
-
-}
-
-object TmpWsForTest {
-  import play.api.libs.concurrent.Akka
-  import play.api.Play.current
-  import scala.concurrent.duration._
-  import play.api.libs.iteratee.Concurrent.Channel
-  import scala.util.Random
-
-
-  def ws(answers: Seq[Answer]): (Iteratee[JsValue, _], Enumerator[JsValue]) = {
-    val (enumerator, channel) = Concurrent.broadcast[JsValue]
-
-    launchScheduler(channel, answers)
-    val iteratee = Iteratee.foreach[JsValue] { _ => }
-    (iteratee, enumerator)
-  }
-
-  private def launchScheduler(channel: Channel[JsValue], answers: Seq[Answer]) = {
-    Akka.system.scheduler.schedule(0.milliseconds, 3.seconds) {
-      for (answer <- Random.shuffle(answers).headOption) {
-        answer.nbVotes += 1
-        channel.push(Json.toJson(answer))
-      }
-    }
   }
 }
