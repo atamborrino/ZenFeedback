@@ -125,7 +125,7 @@ object Application extends Controller {
   }
 
   def getRoomOrga(name: String) = Action {
-    Ok(name)
+    Ok(views.html.orga(name))
   }
   
   def connectOrgaWs(name: String) = Room.async {
