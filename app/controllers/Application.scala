@@ -23,6 +23,7 @@ case class SendToResultPages[A](from: String, payload: A)
 case class SendToAttendants[A](from: String, payload: A)
 
 case class SendNewQuestion(q: Question, answsers: Seq[Answer])
+case class Vote(answer: Answer)
 
 class Organiser extends Actor {
   def receive = {

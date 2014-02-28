@@ -10,6 +10,7 @@ import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 
 import org.mandubian.actorroom._
+import java.util.UUID
 
 import models._
 
@@ -52,6 +53,7 @@ class CustomSupervisor extends Supervisor {
   var resultPages = Map.empty[String, Member]
   
   var current = Option.empty[(Question, Seq[Answer])]
+  var votes = Map.empty[UUID, Int].withDefaultValue(0)
 
   def customReceive: Receive = {
     case ResultPageConnected(id) =>
@@ -75,6 +77,10 @@ class CustomSupervisor extends Supervisor {
     case SendNewQuestion(q: Question, answsers: Seq[Answer]) =>
       current = Some((q, answsers))
       self ! SendToAttendants("", Json.obj())
+      self ! SendToResultPages("", Json.obj())
+      
+    case Vote(answer) =>
+      votes = votes + (answer.uuid -> (votes(answer.uuid) + 1))
       self ! SendToResultPages("", Json.obj())
 
     case SendToOrganisers(from, data) =>
