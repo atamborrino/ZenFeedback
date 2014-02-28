@@ -6,6 +6,8 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
+import models._
+
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 
@@ -19,7 +21,7 @@ class Organiser extends Actor {
   def receive = {
     case Connected(id) =>
       //...
-      
+
     case Received(id, js: JsValue) =>
       // ...
   }
@@ -29,7 +31,7 @@ class ResultPage extends Actor {
   def receive = {
     case Connected(id) =>
       //...
-      
+
     case Received(id, js: JsValue) =>
       // ...
   }
@@ -39,7 +41,7 @@ class Attendant extends Actor {
   def receive = {
     case Connected(id) =>
       //...
-      
+
     case Received(id, js: JsValue) =>
       // ...
   }
@@ -49,6 +51,16 @@ object Application extends Controller {
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
+  }
+
+  def results(name: String) = Action {
+    val question = Question("Favorite phone OS?")
+    val answers = Seq("iPhone", "Android", "Windows").map(Answer(_))
+    Ok(views.html.results(name, question, answers))
+  }
+
+  def resultsWS(name: String) = WebSocket.async[JsValue] { request =>
+    ???
   }
 
   val room = Room(Props[CustomSupervisor])

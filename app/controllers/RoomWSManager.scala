@@ -20,8 +20,8 @@ class OrganiserSender extends WebSocketSender[JsValue] {
     case Connected(id) =>
       context.parent ! OrganiserConnected(id)
   }
-  
-  override def receive = customReceive orElse super.receive 
+
+  override def receive = customReceive orElse super.receive
 }
 
 class ResultPageSender extends WebSocketSender[JsValue] {
@@ -29,8 +29,8 @@ class ResultPageSender extends WebSocketSender[JsValue] {
     case Connected(id) =>
       context.parent ! ResultPageConnected(id)
   }
-  
-  override def receive = customReceive orElse super.receive 
+
+  override def receive = customReceive orElse super.receive
 }
 
 class AttendantSender extends WebSocketSender[JsValue] {
@@ -38,8 +38,8 @@ class AttendantSender extends WebSocketSender[JsValue] {
     case Connected(id) =>
       context.parent ! AttendantConnect(id)
   }
-  
-  override def receive = customReceive orElse super.receive 
+
+  override def receive = customReceive orElse super.receive
 }
 
 case class Connected(id: String)
@@ -48,26 +48,26 @@ class CustomSupervisor extends Supervisor {
   var organisers = Map.empty[String, Member]
   var attendants = Map.empty[String, Member]
   var resultPages = Map.empty[String, Member]
-  
+
   def customReceive: Receive = {
     case ResultPageConnected(id) =>
-      members.get(id) foreach { member => 
+      members.get(id) foreach { member =>
         resultPages += (id -> member)
         member.receiver ! Connected(id)
       }
-    
+
     case AttendantConnect(id) =>
       members.get(id) foreach { member =>
         attendants += (id -> member)
         member.receiver ! Connected(id)
       }
-    
+
     case OrganiserConnected(id) =>
       members.get(id) foreach { member =>
         resultPages += (id -> member)
         member.receiver ! Connected(id)
       }
-      
+
     case SendToOrganisers(from, data) =>
       organisers foreach {
         case (_, member) => member.sender ! Broadcast(from, data)
@@ -81,7 +81,7 @@ class CustomSupervisor extends Supervisor {
     case SendToAttendants(from, data) =>
       attendants foreach {
         case (_, member) => member.sender ! Broadcast(from, data)
-      } 
+      }
 
     case Disconnected(id) =>
       members.get(id).foreach { m =>
@@ -93,7 +93,7 @@ class CustomSupervisor extends Supervisor {
       organisers -= id
       attendants -= id
       resultPages -= id
-      
+
   }
 
   override def receive = customReceive orElse super.receive
