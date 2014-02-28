@@ -8,7 +8,9 @@
   var answers = {};
 
   var init = function() {
-    socket.onmessage = receiveEvent;
+    nbTotalVotes = 0;
+    answers = {};
+    $('#answers').empty();
   };
 
   /* json event schema:
@@ -19,6 +21,9 @@
    }
    */
   var update = function(data) {
+    if (data.newQuestion !== undefined) {
+      init();
+    }
     updateQuestion(data.question);
     updateNbTotalVotes(data.answers);
     updateAnswers(data.answers);
@@ -89,5 +94,5 @@
   };
 
   init();
-
+  socket.onmessage = receiveEvent;
 })();
