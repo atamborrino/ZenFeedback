@@ -11,7 +11,7 @@ GET     /rooms/:name/ws            controllers.Mobile.stream(name: String)
 
 GET     /rooms/:name/results        controllers.Application.results(name: String)
 GET     /rooms/:name/results/ws      controllers.Application.connectResultsWS(name: String)
-GET     /rooms/:name/resultsWS      controllers.Application.resultsWS(name: String) // TEST
+GET     /rooms/:name/resultsWS      controllers.Application.resultsWS(name: String)
 
 
 GET 	/rooms/:name/orga		controllers.Application.getRoomOrga(name: String)
