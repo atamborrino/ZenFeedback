@@ -1,0 +1,45 @@
+// ******************* IMPORTS *******************
+
+@import "_reset.less";
+@import "_mixins.less";
+@import "_grid.less";
+
+@import url('http://fonts.googleapis.com/css?family=Quicksand:300,400,700');
+
+
+// ******************* VARIABLES ******************
+
+@purple: 	#242638;
+@red:		#FC556D;
+@green:		#1EFFD7;
+@blue:		#549CFD;
+@white90: 	rgba(255,255,255,0.9);
+
+@quicksand:	'Quicksand', sans-serif;
+
+
+// ******************* GENERAL ******************
+
+body{
+	font: 400 14px @quicksand;
+	width: 100%;
+	background: @purple;
+	color: @white90;
+}
+
+
+.wrap{
+	width: @total-width;
+	margin: 0px auto;
+}
+header{
+	h1{
+		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font: 300 40px/80px @quicksand;
+		span{
+			font-weight: 400;
+		}
+	}
+}
