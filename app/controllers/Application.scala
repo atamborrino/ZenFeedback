@@ -22,6 +22,8 @@ case class SendToOrganisers[A](from: String, payload: A)
 case class SendToResultPages[A](from: String, payload: A)
 case class SendToAttendants[A](from: String, payload: A)
 
+case class SendNewQuestion(q: Question, answsers: Seq[Answer])
+
 class Organiser extends Actor {
   def receive = {
     case Connected(id) =>

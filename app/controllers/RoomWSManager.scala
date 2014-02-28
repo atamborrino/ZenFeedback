@@ -11,6 +11,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 import org.mandubian.actorroom._
 
+import models._
+
 case class OrganiserConnected(id: String)
 case class ResultPageConnected(id: String)
 case class AttendantConnect(id: String)
@@ -48,6 +50,8 @@ class CustomSupervisor extends Supervisor {
   var organisers = Map.empty[String, Member]
   var attendants = Map.empty[String, Member]
   var resultPages = Map.empty[String, Member]
+  
+  var current = Option.empty[(Question, Seq[Answer])]
 
   def customReceive: Receive = {
     case ResultPageConnected(id) =>
@@ -67,6 +71,11 @@ class CustomSupervisor extends Supervisor {
         resultPages += (id -> member)
         member.receiver ! Connected(id)
       }
+      
+    case SendNewQuestion(q: Question, answsers: Seq[Answer]) =>
+      current = Some((q, answsers))
+      self ! SendToAttendants("", Json.obj())
+      self ! SendToResultPages("", Json.obj())
 
     case SendToOrganisers(from, data) =>
       organisers foreach {
