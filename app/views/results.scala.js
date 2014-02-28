@@ -70,8 +70,7 @@
 
   var renderAnswerScore = function(answerUuid, nbVotes) {
     var $progressBar = $('#' + getAnswerId(answerUuid)).find('.progress-bar');
-    // var percentage = Math.floor(nbVotes / nbTotalVotes * 100);
-    var percentage = Math.floor(Math.random() * 100);
+    var percentage = Math.floor(nbVotes / nbTotalVotes * 100);
     $progressBar.css('width', percentage + '%');
     var withS = nbVotes <= 1 ? '':'s';
     $progressBar.text(nbVotes + ' vote' + withS + ' (' + percentage + '%)');
