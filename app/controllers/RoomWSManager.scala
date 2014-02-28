@@ -13,6 +13,7 @@ import org.mandubian.actorroom._
 import java.util.UUID
 
 import models._
+import JsonFormats._
 
 case class OrganiserConnected(id: String)
 case class ResultPageConnected(id: String)
@@ -77,12 +78,22 @@ class CustomSupervisor extends Supervisor {
         member.receiver ! Connected(id)
       }
       
-    case SendNewQuestion(q: Question, answsers: Seq[Answer]) =>
-      current = Some((q, answsers))
-      self ! SendToAttendants("", Json.obj())
-      self ! SendToResultPages("", Json.obj())
+    case SendNewQuestion(q: Question, answers: Seq[Answer]) =>
+      current = Some((q, answers))
+      val toSend = Json.obj("question" -> q, "answers" -> answers)
+      println(toSend)
+      self ! SendToAttendants("", toSend)
+      self ! SendToResultPages("", toSend)
       
     case Vote(answer) =>
+//      current foreach { case (q, answers) =>
+//        answers map { answer =>
+//          if (answer.uuid == answer.) {
+//            
+//          }
+//         }
+//      }
+      
       votes = votes + (answer.uuid -> (votes(answer.uuid) + 1))
       self ! SendToResultPages("", Json.obj())
 

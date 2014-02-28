@@ -13,4 +13,6 @@ object JsonFormats {
   }
 
   implicit val answerFormat = Json.format[Answer]
+  
+  implicit val questionFormat = Json.format[Question]
 }

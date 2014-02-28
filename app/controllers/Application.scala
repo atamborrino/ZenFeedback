@@ -37,14 +37,20 @@ case class Vote(answer: Answer)
 class Organiser extends Actor {
   def receive = {
     case Connected(id) =>
-      println("Connected")
 
     case Received(id, js: JsValue) =>
       println(js)
-      val question = Question((js \ "question").as[String])
-//      val answers = 
-      context.parent ! SendToAttendants(id, js)
-      context.parent ! SendToResultPages(id, js)
+      
+      val question = Question((js \ "question" \ "name").as[String])
+      
+      val answers = (js \ "answers").as(
+        Reads.seq(
+            (__ \ "name").read[String]
+        )
+      ) map { str => Answer(str) }
+      
+      context.parent ! SendNewQuestion(question, answers)
+      
   }
 }
 
