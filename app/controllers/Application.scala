@@ -37,10 +37,14 @@ case class Vote(answer: Answer)
 class Organiser extends Actor {
   def receive = {
     case Connected(id) =>
-      //...
+      println("Connected")
 
     case Received(id, js: JsValue) =>
-      // ...
+      println(js)
+      val question = Question((js \ "question").as[String])
+//      val answers = 
+      context.parent ! SendToAttendants(id, js)
+      context.parent ! SendToResultPages(id, js)
   }
 }
 
@@ -70,8 +74,8 @@ case class CreateRoom(name: String)
 case class GetRoom(name: String)
 
 class Rooms extends Actor {
-  var rooms = Map.empty[String, Room]
-
+  var rooms = Map("test" -> Room(Props[CustomSupervisor]))
+  
   def receive = {
     case CreateRoom(name) =>
       val maybeRoom = rooms.get(name)
@@ -87,8 +91,12 @@ class Rooms extends Actor {
 
     case GetRoom(name: String) =>
       rooms.get(name) match {
-        case Some(room) => sender ! Option(room)
-        case None => sender ! Option.empty[Room]
+        case Some(room) => 
+          sender ! Option(room)
+          println("sending room")
+        case None => 
+          sender ! Option.empty[Room]
+          println("no room")
       }
   }
 }
@@ -145,7 +153,8 @@ object Application extends Controller {
 
   def connectOrgaWs(name: String) = Room.async {
     val orgaid = UUID.randomUUID().toString
-
+    println("connection...")
+    
     val futureRoom = (rooms ? GetRoom(name)).mapTo[Option[Room]] map (maybeRoom => maybeRoom.get)
 
     futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => orgaid, Props[Organiser], Props[OrganiserSender]))

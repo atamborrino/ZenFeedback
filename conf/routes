@@ -6,7 +6,7 @@
 GET     /                          controllers.Application.index
 
 GET     /rooms/:name               controllers.Mobile.takePartIn(name: String)
-GET     /rooms/:name/ws            controllers.Mobile.stream(name: String)
+GET     /rooms/:name/ws            controllers.Application.connectAttendantWS(name: String)
 
 
 GET     /rooms/:name/results        controllers.Application.results(name: String)

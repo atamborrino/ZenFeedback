@@ -20,7 +20,8 @@ case class AttendantConnect(id: String)
 
 class OrganiserSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
-    case Connected(id) =>
+    case org.mandubian.actorroom.Connected(id) =>
+      println("Connected")
       context.parent ! OrganiserConnected(id)
   }
 
@@ -29,7 +30,7 @@ class OrganiserSender extends WebSocketSender[JsValue] {
 
 class ResultPageSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
-    case Connected(id) =>
+    case org.mandubian.actorroom.Connected(id) =>
       context.parent ! ResultPageConnected(id)
   }
 
@@ -38,7 +39,8 @@ class ResultPageSender extends WebSocketSender[JsValue] {
 
 class AttendantSender extends WebSocketSender[JsValue] {
   def customReceive: Receive = {
-    case Connected(id) =>
+    case org.mandubian.actorroom.Connected(id) =>
+      println(id)
       context.parent ! AttendantConnect(id)
   }
 
@@ -64,9 +66,10 @@ class CustomSupervisor extends Supervisor {
 
     case AttendantConnect(id) =>
       members.get(id) foreach { member =>
-        attendants += (id -> member)
+        attendants = attendants + (id -> member)
         member.receiver ! Connected(id)
       }
+      println(attendants)
 
     case OrganiserConnected(id) =>
       members.get(id) foreach { member =>
@@ -94,6 +97,8 @@ class CustomSupervisor extends Supervisor {
       }
 
     case SendToAttendants(from, data) =>
+      println(data)
+      println(attendants)
       attendants foreach {
         case (_, member) => member.sender ! Broadcast(from, data)
       }

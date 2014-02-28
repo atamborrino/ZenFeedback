@@ -17,6 +17,7 @@ var onReady = function(cb) {
 
         this.socket.onmessage = function onmessage(event) {
             var data = JSON.parse(event.data);
+            console.log(data);
             if(data.type === 'question') {
                 window.zenfeedback.newQuestion(data.question, data.answers);
             }
