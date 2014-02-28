@@ -32,7 +32,7 @@ case class SendToResultPages[A](from: String, payload: A)
 case class SendToAttendants[A](from: String, payload: A)
 
 case class SendNewQuestion(q: Question, answsers: Seq[Answer])
-case class Vote(answer: Answer)
+case class Vote(questionId: UUID, answerId: UUID)
 
 class Organiser extends Actor {
   def receive = {
@@ -68,7 +68,10 @@ class Attendant extends Actor {
       //...
 
     case Received(id, js: JsValue) =>
-      // ...
+      val questionId = UUID.fromString((js \ "questionId").as[String])
+      val answerId = UUID.fromString((js \ "answerId").as[String])
+      context.parent ! Vote(questionId, answerId)
+
   }
 }
 
