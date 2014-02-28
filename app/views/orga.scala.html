@@ -4,23 +4,36 @@
 <html>
   <head>
     <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
   </head>
   <body data-room="@name">
-    <h1>Orga Part: @name</h1>
 
-    <form name="new-question">
-      <label for="question">Question: </label>
-      <input name="question" />
-      <ol id="answers">
-        <li><input name="answer" type="text"/></li>
-        <li><input name="answer" type="text"/></li>
-        <li><input name="answer" type="text"/></li>
-      </ol>
-      <button type="submit">Send</button>
-    </form>
 
-    <ul id="history">
-    </ul>
+    <header class="orga">
+      <div class="wrap">
+        <h1>PIERRE<span>POLL</span>JACQUES</h1>
+        <h2>@name</h2>
+        <h3>• Orga part •</h3>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="newquestion">
+        <form name="new-question">
+          <textarea class="question" name="question" placeholder="Your question here !"></textarea>
+          <ol id="answers">
+            <li><span>1</span><input class="answer" name="answer" type="text"/></li>
+            <li><span>2</span><input class="answer" name="answer" type="text"/></li>
+            <li><span>3</span><input class="answer" name="answer" type="text"/></li>
+          </ol>
+          <button class="btn" type="submit">Send</button>
+        </form>
+      </div>
+      
+      <ul id="history">
+      </ul>
+    </div>
+    
 
     <!-- Javascripts -->
     <script type="text/javascript" src="@routes.Assets.at("javascripts/orga.js")"></script>
