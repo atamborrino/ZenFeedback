@@ -65,10 +65,6 @@ object Application extends Controller {
 
   val room = Room(Props[CustomSupervisor])
 
-  def takePartIn(name: String) = Action {
-    Ok(views.html.takePartIn(name))
-  }
-
   def connect(id: String) = {
     //room.websocket[JsValue](id, Props[Organiser], Props[OrganiserSender])
   }

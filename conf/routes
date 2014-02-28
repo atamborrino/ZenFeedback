@@ -4,7 +4,8 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /:name                      controllers.Application.takePartIn(name: String)
+GET     /:name                      controllers.Mobile.takePartIn(name: String)
+GET     /:name/ws                   controllers.Mobile.stream(name: String)
 
 GET     /rooms/:name/results        controllers.Application.results(name: String)
 

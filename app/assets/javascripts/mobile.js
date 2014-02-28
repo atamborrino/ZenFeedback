@@ -27,7 +27,7 @@
     // Let's go
     var roomName = $('body').attr('data-room');
     window.zenFeedBack = new ZenFeedBack(
-        'ws://localhost:9000/rooms/' + roomName + '/listen',
+        'ws://localhost:9000/rooms/' + roomName + '/ws',
         function init(socket) {
             window.zStream = new Stream(socket);
         }
