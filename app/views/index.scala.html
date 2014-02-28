@@ -1,6 +1,12 @@
-@(message: String)
-
 @main("ZenFeedback") {
-  Hello
+  <h1>ZenFeeback</h1>
+  <p>Transform your conference in a real-time interactive event</p>
+  <div>
+    <p>Create your room in seconds</p>
+    <form action="/rooms" method="post">
+      Event name <input type="text" name="name">
+      <button>Create</button>
+    </form>
+  </div>
 
 }
