@@ -80,7 +80,7 @@
     var percentage = Math.floor(nbVotes / nbTotalVotes * 100);
     $progressBar.css('height', percentage + '%');
     var withS = nbVotes <= 1 ? '':'s';
-    $progressBar.text(nbVotes + ' vote' + withS + ' (' + percentage + '%)');
+    $progressBar.text(percentage + '%' +  '(' + nbVotes + ')');
     $progressBar.attr('aria-valuenow', percentage);
   };
 

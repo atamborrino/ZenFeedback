@@ -22,19 +22,20 @@
         <form name="new-question">
           <textarea class="question" name="question" placeholder="Your question here !"></textarea>
           <ol id="answers">
-            <li><span>1</span><input class="answer" name="answer" type="text"/></li>
-            <li><span>2</span><input class="answer" name="answer" type="text"/></li>
-            <li><span>3</span><input class="answer" name="answer" type="text"/></li>
+            <li><span>1</span><input class="answer" name="answer" type="text" placeholder="answer 1" /></li>
+            <li><span>2</span><input class="answer" name="answer" type="text"  placeholder="answer 2"/></li>
+            <li><span>3</span><input class="answer" name="answer" type="text"  placeholder="answer 3"/></li>
           </ol>
           <button class="btn" type="submit">Send</button>
         </form>
       </div>
+      <div class="urls">
+        <p>Attendants page: @host/rooms/@name</p>
+        <p>Results page: @host/rooms/@name/results</p>
+      </div>
     </div>
 
-    <div class="urls">
-      <p>Attendants page: @host/rooms/@name</p>
-      <p>Results page: @host/rooms/@name/results</p>
-    </div>
+    
 
     <!-- Javascripts -->
     <script type="text/javascript" src="@routes.Assets.at("javascripts/orga.js")"></script>

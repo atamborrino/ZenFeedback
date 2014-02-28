@@ -157,10 +157,14 @@ input[type="text"], textarea{
 }
 
 .urls {
-    width: 340px;
-    margin: auto;
-    padding-top: 20px;
-    clear: both;
+    .column(8);
+	.push(2);
+	.pull(2);
+	text-align: center;
+	font: 400 16px/30px @quicksand;
+	color: @white90;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 
@@ -269,8 +273,10 @@ input[type="text"], textarea{
 			.progress-bar{
 				background: @green;
 				position: absolute;
+				color: @purple;
 				bottom: 0px;
 				width: 100%;
+				text-align: center;
 				.transition(all 1s ease);
 			}
 		}
