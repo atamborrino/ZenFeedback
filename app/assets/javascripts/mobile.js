@@ -17,9 +17,8 @@ var onReady = function(cb) {
 
         this.socket.onmessage = function onmessage(event) {
             var data = JSON.parse(event.data);
-            console.log(data);
-            if(data.type === 'question') {
-                window.zenfeedback.newQuestion(data.question, data.answers);
+            if(data.question) {
+                window.zenFeedBack.newQuestion(data.question, data.answers);
             }
         };
     };
@@ -41,29 +40,28 @@ var onReady = function(cb) {
     };
 
     ZenFeedBack.prototype.newQuestion = function(question, answers) {
-        var questionTmpl = '<li><p class="question">'+ question +'</p>';
+        var questionTmpl = '<p class="name">'+ question.name +'</p><input type="hidden" name="question-id" value="'+ question.uuid +'"/>';
         var answersTmpl = '<ul class="answsers">' + answers.map(function(answer) {
             var t =
-                    '<li>\
-                <label for="$name">$label</label>\
-                <input type="checked" name="$id"/>\
+                '<li>\
+                <button class="answer" data-value="$answerId"/>\
+                <label>$label</label>\
                 </li>';
 
-            return t.replace(/\$id/g, answer.id)
-                .replace(/\$label/g, answer.label);
-
-        }).join('') + '</ul>';
+            return t.replace(/\$answerId/g, answer.uuid)
+                .replace(/\$label/g, answer.name);
+        }).join('');
 
         var tmpl = questionTmpl + answersTmpl;
-        ('#questions').html(tmpl);
+        $('form[name=question]').html(tmpl);
     };
 
     ZenFeedBack.prototype.answerQuestion = function(questionId, answerId) {
-        var anwser = {
+        var answer = {
             questionId: questionId,
             answerId: answerId
         };
-        window.zStream.send(JSON.stringify(anwser));
+        window.zStream.send(answer);
     };
 
     // MAIN
@@ -80,6 +78,12 @@ var onReady = function(cb) {
 $(document).ready(function() {
     console.log('Welcome to ZenFeedBack !');
     onReady(function() {
-        window.zStream.send({ msg: 'ping!'});
+        $('body').on('click', 'form[name=question] button.answer', function(e) {
+            e.preventDefault();
+            var questionId = $('input[name=question-id]').val();
+            var answerId =  $(this).attr('data-value');
+            window.zenFeedBack.answerQuestion(questionId, answerId);
+            $('form[name=question]').empty();
+        });
     });
 });

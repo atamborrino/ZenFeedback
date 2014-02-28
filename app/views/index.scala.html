@@ -1,15 +1,18 @@
 @main("ZenFeedback") {
-  <header>
-		<div class="wrap">
-			<h1>PIERRE <span>POLL</span> JACQUES</h1>
-		</div>
-	</header>
-  <p>Transform your conference in a real-time interactive event</p>
-  <div>
-    <p>Create your room in seconds</p>
-    <form action="/rooms" method="post">
-      Event name <input type="text" name="name">
-      <button>Create</button>
-    </form>
-  </div>
+<header>
+	<div class="wrap">
+		<h1>PIERRE<span>POLL</span>JACQUES</h1>
+		<h2>Transform your conference in<br/>a real-time interactive event</h2>
+		<br class="clearfix" />
+	</div>
+</header>
+<div class="wrap">
+	<div class="createroom">
+		<h4>Create your room in seconds</h4>
+		<form action="/rooms" method="post">
+			<input type="text" name="name" placeholder="Event name">
+		  	<button class="btn">Create</button>
+		</form>
+	</div>
+</div>
 }
