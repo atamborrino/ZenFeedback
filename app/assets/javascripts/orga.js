@@ -38,8 +38,9 @@ var onReady = function(cb) {
 
     // MAIN
     var roomName = $('body').attr('data-room');
+    var host = $('body').attr('data-host');
     window.zenFeedBack = new ZenFeedBack(
-        'ws://localhost:9000/rooms/' + roomName + '/orga/ws',
+        'ws://'+host+'/rooms/' + roomName + '/orga/ws',
         function init(socket) {
             window.zStream = new Stream(socket);
         }

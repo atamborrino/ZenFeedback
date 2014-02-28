@@ -1,4 +1,4 @@
-@(name: String)
+@(name: String, host: String)
 
 <!DOCTYPE html>
 <html>
@@ -8,8 +8,10 @@
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/mobile.css")">
   </head>
-  <body data-room="@name">
+
     
+    <body data-room="@name" data-host="@host">
+
     <div class="empty">
       <p>Be ready for the next question !</p>
     </div>
