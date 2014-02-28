@@ -20,9 +20,8 @@
    */
   var update = function(data) {
     updateQuestion(data.question);
+    updateNbTotalVotes(data.answers);
     updateAnswers(data.answers);
-    // Il faut que je reçoive le nombre total de votes
-    // nbTotalVotes += 1;
   };
 
   var updateQuestion = function(question) {
@@ -32,10 +31,18 @@
   };
 
   var updateAnswers = function(answers) {
-    console.log("answers : ", answers);
     if (answers !== undefined) {
       for (var i = 0; i < answers.length; i++) {
         updateAnswer(answers[i]);
+      }
+    }
+  };
+
+  var updateNbTotalVotes = function(answers) {
+    if (answers !== undefined) {
+      nbTotalVotes = 0;
+      for (var i = 0; i < answers.length; i++) {
+        nbTotalVotes += answers[i].nbVotes;
       }
     }
   };
@@ -48,7 +55,6 @@
     if($('#' + getAnswerId(answer.uuid)).length == 0) {
       cloneAnswerTemplate(answer.uuid);
     }
-    console.log("UUID : ", answer.uuid, getAnswerId(answer.uuid));
     renderAnswerName(answer.uuid, answer.name);
     renderAnswerScore(answer.uuid, answer.nbVotes);
   };
@@ -56,15 +62,11 @@
   var cloneAnswerTemplate = function(answerUuid) {
     var $answer = $('#answerTemplate').clone();
     var answerId = getAnswerId(answerUuid);
-    console.log("ANSWERID : ", answerId);
     $answer.attr({'style': ''}).attr({'id': getAnswerId(answerUuid)});
-    console.log("ANSWER  :" ,$answer);
     $('#answers').append($answer);
   };
 
   var renderAnswerName = function(answerUuid, answerName) {
-    console.log("answerName :", answerName);
-    console.log("$answerName : ", $('#' + getAnswerId(answerUuid)));
     $('#' + getAnswerId(answerUuid)).find('.answerName').text(answerName);
   };
 
@@ -78,8 +80,8 @@
   };
 
   var receiveEvent = function(event) {
-    console.log("EVENT : ", event);
     var data = JSON.parse(event.data);
+    console.log("DATA : ", data);
     if(data.error) {
       socket.close();
     } else {
