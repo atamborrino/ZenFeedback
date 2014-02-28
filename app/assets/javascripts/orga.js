@@ -50,6 +50,24 @@ var onReady = function(cb) {
 $(document).ready(function() {
     console.log('Welcome to ZenFeedBack !');
     onReady(function() {
-        window.zStream.send({ msg: 'ping!'});
+        var $form = $('form[name=new-question]');
+        $form.on('submit', function(e) {
+            e.preventDefault();
+            var newQuestion = $(this).serializeArray().reduce(function(acc, p) {
+                if(p.name === 'question') {
+                    acc.question = {
+                        name: p.value
+                    };
+                } else if(p.name === 'answer') {
+                    if(!acc.answers) acc.answers = [];
+                    acc.answers.push({
+                        name: p.value
+                    });
+                }
+                return acc;
+            }, {});
+            window.zStream.send(newQuestion);
+            $(this).find('input').val('');
+        });
     });
 });

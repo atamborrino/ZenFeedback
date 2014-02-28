@@ -9,12 +9,17 @@
     <h1>Orga Part: @name</h1>
 
     <form name="new-question">
+      <label for="question">Question: </label>
       <input name="question" />
+      <ol id="answers">
+        <li><input name="answer" type="text"/></li>
+        <li><input name="answer" type="text"/></li>
+        <li><input name="answer" type="text"/></li>
+      </ol>
       <button type="submit">Send</button>
     </form>
 
     <ul id="history">
-      <li></li>
     </ul>
 
     <!-- Javascripts -->
