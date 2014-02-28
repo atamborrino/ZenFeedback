@@ -3,14 +3,22 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
-GET     /:name                      controllers.Application.takePartIn(name: String)
+GET     /                          controllers.Application.index
+
+GET     /rooms/:name               controllers.Mobile.takePartIn(name: String)
+GET     /rooms/:name/ws            controllers.Mobile.stream(name: String)
+
 
 GET     /rooms/:name/results        controllers.Application.results(name: String)
-
+GET     /rooms/:name/results/ws      controllers.Application.connectResultsWS(name: String)
 GET     /rooms/:name/resultsWS      controllers.Application.resultsWS(name: String)
 
 GET    /assets/javascripts/results.js   controllers.Application.resultsJs(name: String)
 
+GET 	/rooms/:name/orga		controllers.Application.getRoomOrga(name: String)
+GET     /rooms/:name/orga/ws       controllers.Application.connectOrgaWs(name: String)
+
+POST    /rooms						controllers.Application.createRoom
+
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file              controllers.Assets.at(path="/public", file)
