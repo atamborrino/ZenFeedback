@@ -84,7 +84,7 @@ class CustomSupervisor extends Supervisor {
 
     case SendNewQuestion(q: Question, answers: Seq[Answer]) =>
       current = Some((q, answers))
-      val toSend = Json.obj("question" -> q, "answers" -> answers)
+      val toSend = Json.obj("question" -> q, "answers" -> answers, "newQuestion" -> true)
       println(toSend)
       self ! SendToAttendants("", toSend)
       self ! SendToResultPages("", toSend)
@@ -100,6 +100,7 @@ class CustomSupervisor extends Supervisor {
       }
       current foreach { case (q, answers) =>
         val toSend = Json.obj("question" -> q, "answers" -> answers)
+        println(toSend)
         self ! SendToResultPages("", toSend)
       }
 
