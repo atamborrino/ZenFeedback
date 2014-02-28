@@ -54,7 +54,7 @@ class CustomSupervisor extends Supervisor {
   var organisers = Map.empty[String, Member]
   var attendants = Map.empty[String, Member]
   var resultPages = Map.empty[String, Member]
-  
+
   var current = Option.empty[(Question, Seq[Answer])]
 
   def customReceive: Receive = {
@@ -81,14 +81,14 @@ class CustomSupervisor extends Supervisor {
         resultPages += (id -> member)
         member.receiver ! Connected(id)
       }
-      
+
     case SendNewQuestion(q: Question, answers: Seq[Answer]) =>
       current = Some((q, answers))
       val toSend = Json.obj("question" -> q, "answers" -> answers)
       println(toSend)
       self ! SendToAttendants("", toSend)
       self ! SendToResultPages("", toSend)
-      
+
     case Vote(questionId: UUID, answerId: UUID) =>
       current = current map { case (q, answers) =>
         val newAnswers = answers map { a =>
@@ -102,7 +102,7 @@ class CustomSupervisor extends Supervisor {
         val toSend = Json.obj("question" -> q, "answers" -> answers)
         self ! SendToResultPages("", toSend)
       }
-      
+
     case SendToOrganisers(from, data) =>
       organisers foreach {
         case (_, member) => member.sender ! Broadcast(from, data)

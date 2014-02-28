@@ -118,11 +118,8 @@ object Application extends Controller {
     Ok(views.html.index())
   }
 
-  val question = Question("Favorite phone OS?")
-  val answers = Seq("iPhone", "Android", "Windows").map(Answer(_))
-
   def results(name: String) = Action {
-    Ok(views.html.results(name, question, answers))
+    Ok(views.html.results(name))
   }
 
   def resultsJs(name: String) = Action { implicit request =>
