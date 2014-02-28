@@ -100,6 +100,7 @@ class CustomSupervisor extends Supervisor {
       }
       current foreach { case (q, answers) =>
         val toSend = Json.obj("question" -> q, "answers" -> answers)
+        println(toSend)
         self ! SendToResultPages("", toSend)
       }
       
