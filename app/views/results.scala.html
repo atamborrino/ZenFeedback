@@ -10,16 +10,22 @@
 
 	<h3 class="questionName">Wait for a new question to come</h3>
 
-	<div id="answers">
+	<div id="answers" class="wrapviz">
 
 	</div>
 
+	<div class="numbers">
+		<p>total vote</p>
+		<p>% r1</p>
+		<p>% r2</p>
+		<p>% r3</p>
+	</div>
 
-	<div id="answerTemplate" style="visibility:hidden;">
-	  <strong class="answerName"></strong>
+	<div id="answerTemplate" class="answer" style="visibility:hidden;">
+	  <!--<strong class="answerName"></strong>-->
 
-	  <div class="progress progress-striped active">
-	    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+	  <div class="progress active">
+	    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 1px;">
 	      0 votes (0%)
 	    </div>
 	  </div>

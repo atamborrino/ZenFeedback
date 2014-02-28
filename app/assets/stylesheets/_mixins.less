@@ -211,7 +211,10 @@
     color: @color;
   }
 }
-
+.animation(@animation) {
+  -webkit-animation: @animation;
+          animation: @animation;
+}
 .gradient-vertical(@start-color: #555, @start-percent: 0%, @end-color: #333, @end-percent: 100%) {
   background-color: @end-color;
   background-image: -webkit-gradient(linear, left @start-percent, left @end-percent, from(@start-color), to(@end-color)); // Safari 4+, Chrome 2+

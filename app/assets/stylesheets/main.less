@@ -3,6 +3,8 @@
 @import "_reset.less";
 @import "_mixins.less";
 @import "_grid.less";
+@import "_fonticon.less";
+
 
 @import url('http://fonts.googleapis.com/css?family=Quicksand:300,400,700');
 
@@ -126,7 +128,8 @@ input[type="text"], textarea{
 	.column(6);
 	.push(3);
 	.pull(3);
-	margin-top: 100px;
+	margin-top: 70px;
+	margin-bottom: 20px;
 	h4, input, button{
 		display: block;
 		width: 100%;
@@ -159,6 +162,7 @@ input[type="text"], textarea{
     padding-top: 20px;
     clear: both;
 }
+
 
 .newquestion{
 	.column(8);
@@ -239,8 +243,94 @@ input[type="text"], textarea{
 		.uppercase;
 		letter-spacing: 0.2em;
 		font-size: 2em;
+		font-weight: 300;
 		display: block;
 		width: 80%;
 		margin: 40px auto;
 	}
+}
+
+
+
+.wrapviz{
+	height: 300px;
+	width: 50%;
+	margin-left: 25%;
+	float: left;
+	.answer{
+		height: 100%;
+		width: 30%;
+		margin-right: 3%;
+		float: left;
+		height: 100%;
+		.progress{
+			height: 100%;
+			position: relative;
+			.progress-bar{
+				background: @green;
+				position: absolute;
+				bottom: 0px;
+				width: 100%;
+				.transition(all 1s ease);
+			}
+		}
+		&:first-of-type{
+			.progress-bar{
+				background: @red;
+			}
+		}
+		&:last-of-type{
+			.progress-bar{
+				background: @blue;
+			}
+		}
+	}
+	
+	
+}
+.numbers{
+	float: left;
+	width: 20%;
+}
+
+
+
+
+// ******************* ANIMATION ******************
+
+.logo{
+	&.home{
+		font-size: 80px;
+		text-align: center;	
+	}	
+	&.animated{
+		span.icon-logo{
+			font-family: 'ppj-icons';
+			speak: none;
+			font-style: normal;
+			font-weight: normal;
+			font-variant: normal;
+			text-transform: none;
+			line-height: 1;
+			&:before{
+				content: "\e60c";
+				.animation(pierrepolljacques 1s);
+			}
+		}
+		
+	}
+}
+
+
+
+
+@-webkit-keyframes pierrepolljacques{
+	0%{
+		content: "\e60c";
+	}
+	50%{
+		content: "\e607";
+	}
+
+
 }
