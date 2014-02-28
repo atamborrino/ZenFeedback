@@ -56,21 +56,25 @@ class CustomSupervisor extends Supervisor {
   var resultPages = Map.empty[String, Member]
   
   var current = Option.empty[(Question, Seq[Answer])]
-  var votes = Map.empty[UUID, Int].withDefaultValue(0)
 
   def customReceive: Receive = {
     case ResultPageConnected(id) =>
       members.get(id) foreach { member =>
         resultPages += (id -> member)
         member.receiver ! Connected(id)
+        current foreach { case (q, as) =>
+          member.sender ! Broadcast("", Json.obj("question" -> q, "answers" -> as))
+        }
       }
 
     case AttendantConnect(id) =>
       members.get(id) foreach { member =>
         attendants = attendants + (id -> member)
         member.receiver ! Connected(id)
+        current foreach { case (q, as) =>
+          member.sender ! Broadcast("", Json.obj("question" -> q, "answers" -> as))
+        }
       }
-      println(attendants)
 
     case OrganiserConnected(id) =>
       members.get(id) foreach { member =>
@@ -85,18 +89,20 @@ class CustomSupervisor extends Supervisor {
       self ! SendToAttendants("", toSend)
       self ! SendToResultPages("", toSend)
       
-    case Vote(answer) =>
-//      current foreach { case (q, answers) =>
-//        answers map { answer =>
-//          if (answer.uuid == answer.) {
-//            
-//          }
-//         }
-//      }
+    case Vote(questionId: UUID, answerId: UUID) =>
+      current = current map { case (q, answers) =>
+        val newAnswers = answers map { a =>
+          if (a.uuid.toString == answerId.toString) {
+            a.copy(nbVotes = a.nbVotes + 1)
+          } else a
+         }
+        (q, newAnswers)
+      }
+      current foreach { case (q, answers) =>
+        val toSend = Json.obj("question" -> q, "answers" -> answers)
+        self ! SendToResultPages("", toSend)
+      }
       
-      votes = votes + (answer.uuid -> (votes(answer.uuid) + 1))
-      self ! SendToResultPages("", Json.obj())
-
     case SendToOrganisers(from, data) =>
       organisers foreach {
         case (_, member) => member.sender ! Broadcast(from, data)
