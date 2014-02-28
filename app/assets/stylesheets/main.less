@@ -37,6 +37,9 @@ body{
 	width: @total-width;
 	margin: 0px auto;
 }
+.wrap100{
+	width: 100%;
+}
 
 header{
 	text-align: center;
@@ -62,7 +65,7 @@ header{
 		word-spacing: 0.6em;
 		margin-bottom: 20px;
 	}
-	&.orga{
+	&.small{
 		h1{
 			font: 300 22px/40px @quicksand;
 			margin-bottom: 10px;
@@ -208,5 +211,30 @@ input[type="text"], textarea{
 		.push(1);
 		.pull(1);
 		margin-top: 50px;
+	}
+}
+
+.results{
+	.box-sizing(border-box);
+	width: 100%;
+	*{
+		.box-sizing(border-box);
+	}
+	h2.roomurl{
+		display: block;
+		width: 75%;
+		min-width: 500px;
+		margin: 0px auto;
+		float: initial;
+		font: 400 18px/44px @quicksand;
+	}
+	h3{
+		text-align: center;
+		.uppercase;
+		letter-spacing: 0.2em;
+		font-size: 2em;
+		display: block;
+		width: 80%;
+		margin: 40px auto;
 	}
 }
