@@ -134,5 +134,23 @@ object Application extends Controller {
     futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => orgaid, Props[Organiser], Props[OrganiserSender]))
   }
   
+  def connectAttendantWS(name: String) = Room.async {
+    val userid = UUID.randomUUID().toString
+    
+    val futureRoom = (rooms ? GetRoom(name)).mapTo[Option[Room]] map (maybeRoom => maybeRoom.get)
+    
+    futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => userid, Props[Attendant], Props[AttendantSender]))
+  }
+  
+  def connectResultsWS(name: String) = Room.async {
+    val id = UUID.randomUUID().toString
+    
+    val futureRoom = (rooms ? GetRoom(name)).mapTo[Option[Room]] map (maybeRoom => maybeRoom.get)
+    
+    futureRoom map (room => room.websocket[JsValue]((_: RequestHeader) => id, Props[ResultPage], Props[ResultPageSender]))
+  }
+  
+  
+  
 
 }
