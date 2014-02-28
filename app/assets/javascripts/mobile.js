@@ -16,6 +16,7 @@ var onReady = function(cb) {
         this.socket = socket;
 
         this.socket.onmessage = function onmessage(event) {
+            $('.empty').addClass('hidden');
             var data = JSON.parse(event.data);
             if(data.question) {
                 window.zenFeedBack.newQuestion(data.question, data.answers);
@@ -44,8 +45,7 @@ var onReady = function(cb) {
         var answersTmpl = '<ul class="answsers">' + answers.map(function(answer) {
             var t =
                 '<li>\
-                <button class="answer" data-value="$answerId"/>\
-                <label>$label</label>\
+                <span class="color"></span><button class="answer" data-value="$answerId">$label</button>\
                 </li>';
 
             return t.replace(/\$answerId/g, answer.uuid)
@@ -78,11 +78,12 @@ var onReady = function(cb) {
 $(document).ready(function() {
     console.log('Welcome to ZenFeedBack !');
     onReady(function() {
-        $('body').on('click', 'form[name=question] button.answer', function(e) {
+        $('body').on('click tap', 'form[name=question] button.answer', function(e) {
             e.preventDefault();
             var questionId = $('input[name=question-id]').val();
             var answerId =  $(this).attr('data-value');
             window.zenFeedBack.answerQuestion(questionId, answerId);
+            $('.empty').removeClass('hidden');
             $('form[name=question]').empty();
         });
     });
