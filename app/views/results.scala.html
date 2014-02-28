@@ -1,24 +1,30 @@
 @(roomName: String, host: String)
 
 @main(s"$roomName - poll results") {
-<h1 class="questionName">Wait for a new question to come</h1>
 
-<div id="answers">
+<div class="wrap100 results">
+	<header class="small">
+		<h1>PIERRE<span>POLL</span>JACQUES</h1>
+		<h2 class="roomurl">@host/rooms/@roomName</h3>
+	</header>
+
+	<h3 class="questionName">Wait for a new question to come</h3>
+
+	<div id="answers">
+
+	</div>
+
+
+	<div id="answerTemplate" style="visibility:hidden;">
+	  <strong class="answerName"></strong>
+
+	  <div class="progress progress-striped active">
+	    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+	      0 votes (0%)
+	    </div>
+	  </div>
+	</div>
 
 </div>
-
-
-<div id="answerTemplate" style="visibility:hidden;">
-  <strong class="answerName"></strong>
-
-  <div class="progress progress-striped active">
-    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-      0 votes (0%)
-    </div>
-  </div>
-</div>
-
-<p>Connect to @host/rooms/@roomName to vote!</p>
-
 <script type="text/javascript" charset="utf-8" src="@routes.Application.resultsJs(roomName)"></script>
 }
