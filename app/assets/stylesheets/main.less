@@ -10,10 +10,15 @@
 // ******************* VARIABLES ******************
 
 @purple: 	#242638;
+@mint:		#4cfff0;
+
 @red:		#FC556D;
 @green:		#1EFFD7;
 @blue:		#549CFD;
+
 @white90: 	rgba(255,255,255,0.9);
+@black10:	rgba(0,0,0,0.1);
+
 
 @quicksand:	'Quicksand', sans-serif;
 
@@ -33,13 +38,89 @@ body{
 	margin: 0px auto;
 }
 header{
+	text-align: center;
+	.uppercase;
+	background: darken(@purple, 5%);
+	padding: 20px;
 	h1{
-		text-align: center;
-		text-transform: uppercase;
-		letter-spacing: 1px;
+		letter-spacing: 12px;
 		font: 300 40px/80px @quicksand;
+		margin-bottom: 20px;
 		span{
 			font-weight: 400;
 		}
 	}
+	h2{
+		font: 300 18px/30px @quicksand;
+		letter-spacing: 0.4em;
+		word-spacing: 0.6em;
+		margin-bottom: 20px;
+	}
 }
+
+h3{
+	text-align: center;
+	font: 300 20px/50px @quicksand;
+	vertical-align: top;
+	.uppercase;
+	border-bottom: solid 1px @white90;
+
+}
+
+
+.createroom{
+	.column(6);
+	.push(3);
+	.pull(3);
+	margin-top: 100px;
+	h3, input, button{
+		display: block;
+		width: 100%;
+		margin-bottom: 50px;
+	}
+	input{
+		padding: 10px;
+		.uppercase;
+		font: 400 20px/40px @quicksand; 
+		text-align: center;
+		letter-spacing: 0.3em;
+		&:focus{
+			background: @white90;
+			border-color: white;
+			outline: none;
+		}
+	}
+
+}
+
+input{
+	border: solid 1px @white90;
+	background: transparent;
+	color: @purple;
+	.transition(all 0.15s ease);
+	&:focus{
+		background: @white90;
+		border-color: white;
+		outline: none;
+	}
+}
+
+
+.btn{
+	.border-radius(2px);
+	background: @black10;
+	border: solid 1px @mint;
+	.uppercase;
+	color: @mint;
+	.transition(all 0.15s ease);
+	font: 400 20px @quicksand;
+	height: 60px;
+	letter-spacing: 0.3em;
+	&:hover, &:focus{
+		background: @mint;
+		color: @purple;
+		outline: none;
+	}
+}
+
+
