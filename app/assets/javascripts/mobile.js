@@ -52,16 +52,16 @@ var onReady = function(cb) {
                 .replace(/\$label/g, answer.name);
         }).join('');
 
-        var tmpl = questionTmpl + answersTmpl + '<button type="submit">Answer</button>';
+        var tmpl = questionTmpl + answersTmpl;
         $('form[name=question]').html(tmpl);
     };
 
     ZenFeedBack.prototype.answerQuestion = function(questionId, answerId) {
-        var anwser = {
+        var answer = {
             questionId: questionId,
             answerId: answerId
         };
-        window.zStream.send(anwser);
+        window.zStream.send(answer);
     };
 
     // MAIN
@@ -83,7 +83,7 @@ $(document).ready(function() {
             var questionId = $('input[name=question-id]').val();
             var answerId =  $(this).attr('data-value');
             window.zenFeedBack.answerQuestion(questionId, answerId);
-            $('form[name=question]').remove();
+            $('form[name=question]').empty();
         });
     });
 });
