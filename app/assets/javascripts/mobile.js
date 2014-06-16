@@ -38,6 +38,14 @@ var onReady = function(cb) {
             isReady = true;
             pendingCallback && pendingCallback();
         };
+
+        socket.onclose = function() {
+            alert("You have been disconnected due to network problems. Please refresh the page to connect again.")
+        };
+
+        setInterval(function() {
+            socket.send(JSON.stringify({"heartbeat" : 60000}));
+        }, 60000);
     };
 
     ZenFeedBack.prototype.newQuestion = function(question, answers) {

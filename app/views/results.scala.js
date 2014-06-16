@@ -4,6 +4,10 @@
   var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
   var socket = new WS("@routes.Application.connectResultsWS(roomName).webSocketURL()");
 
+  setInterval(function() {
+      socket.send(JSON.stringify({"heartbeat" : 60000}));
+  }, 60000);
+
   var nbTotalVotes = 0;
   var answers = {};
 

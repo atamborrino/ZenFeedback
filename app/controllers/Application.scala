@@ -27,6 +27,8 @@ import play.api.libs.concurrent.Akka
 import akka.util.Timeout
 import scala.concurrent.duration._
 
+import play.api.libs.ws._
+
 case class SendToOrganisers[A](from: String, payload: A)
 case class SendToResultPages[A](from: String, payload: A)
 case class SendToAttendants[A](from: String, payload: A)
@@ -39,16 +41,20 @@ class Organiser extends Actor {
     case Connected(id) =>
 
     case Received(id, js: JsValue) =>
-      val question = Question((js \ "question" \ "name").as[String])
+      if (!(js \ "heartbeat").asOpt[Int].isDefined) {
+        val question = Question((js \ "question" \ "name").as[String])
 
-      val answers = (js \ "answers").as(
-        Reads.seq(
-            (__ \ "name").read[String]
-        )
-      ) map { str => Answer(str) }
+        val answers = (js \ "answers").as(
+          Reads.seq(
+              (__ \ "name").read[String]
+          )
+        ) map { str => Answer(str) }
+  
+        context.parent ! SendNewQuestion(question, answers)
+      }
 
-      context.parent ! SendNewQuestion(question, answers)
 
+    case _ =>
   }
 }
 
@@ -59,6 +65,8 @@ class ResultPage extends Actor {
 
     case Received(id, js: JsValue) =>
       // ...
+
+    case _ =>
   }
 }
 
@@ -68,10 +76,13 @@ class Attendant extends Actor {
       //...
 
     case Received(id, js: JsValue) =>
-      val questionId = UUID.fromString((js \ "questionId").as[String])
-      val answerId = UUID.fromString((js \ "answerId").as[String])
-      context.parent ! Vote(questionId, answerId)
+      if (!(js \ "heartbeat").asOpt[Int].isDefined) {
+        val questionId = UUID.fromString((js \ "questionId").as[String])
+        val answerId = UUID.fromString((js \ "answerId").as[String])
+        context.parent ! Vote(questionId, answerId)
+      }
 
+    case _ =>
   }
 }
 
@@ -112,15 +123,26 @@ class Rooms extends Actor {
 object Application extends Controller {
   implicit val timeout = Timeout(5 seconds)
 
+  val bitlytoken = "TODO"
+  val bitlyurl = s"https://api-ssl.bitly.com/v3/shorten?access_token=$bitlytoken&longUrl="
+
   val rooms = Akka.system.actorOf(Props[Rooms])
 
   def index = Action {
     Ok(views.html.index())
   }
 
-  def results(name: String) = Action { req =>
+  def results(name: String) = Action.async { req =>
     val host = req.host.split(":80").headOption getOrElse req.host
-    Ok(views.html.results(name, host))
+    val roomurl = s"http://$host/rooms/$name"
+    val roomurlEncoded = java.net.URLEncoder.encode(roomurl, "UTF-8")
+    val futShortUrl = WS.url(bitlyurl + roomurlEncoded).get() map { response =>
+      println(response.body)
+      val json = Json.parse(response.body)
+      (json \ "data" \ "url").asOpt[String].flatMap(_.split("http://").lastOption) getOrElse roomurl
+    } 
+
+    futShortUrl map (url => Ok(views.html.results(url, name)))
   }
 
   def resultsJs(name: String) = Action { implicit request =>

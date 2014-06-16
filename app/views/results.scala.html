@@ -1,11 +1,11 @@
-@(roomName: String, host: String)
+@(roomurl: String, roomName: String)
 
 @main(s"$roomName - poll results") {
 
 <div class="wrap100 results">
 	<header class="small">
 		<h1>PIERRE<span>POLL</span>JACQUES</h1>
-		<h2 class="roomurl">@host/rooms/@roomName</h3>
+		<h2 class="roomurl">@roomurl</h3>
 	</header>
 
 	<h3 class="questionName">Wait for a new question to come</h3>

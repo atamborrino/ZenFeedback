@@ -18,6 +18,10 @@ var onReady = function(cb) {
         this.socket.onmessage = function onmessage(event) {
             var data = JSON.parse(event.data);
         };
+
+        setInterval(function() {
+           socket.send(JSON.stringify({"heartbeat" : 60000}));
+        }, 60000);
     };
 
     Stream.prototype.send = function(data) {
